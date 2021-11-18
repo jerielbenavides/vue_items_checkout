@@ -1,6 +1,6 @@
 <template>
     <div class="row container">
-        <div class="login_form col s12 m6 l3">
+        <div class="login_form col s12 m12 l3">
             <h5>EQUIPMENT SIGN OUT</h5>
             <p></p>
             <p id="login_errors"></p>
@@ -15,8 +15,12 @@
                     </div>
                     <button class="btn waves-effect waves-light" type="submit" name="action">Sign In</button>
             </form>
+            <div id="login_links">
+                <a href="/passwordreset" class="">Forgot Password?</a>
+                <a href="/register" class="">Create Account</a>
+            </div>
         </div>
-        <div class="col s0 m6 l9">
+        <div class="col l9 hide-on-med-and-down">
             <div id="login_img">
                 <img src="../assets/logo_wall.jpg">
             </div>
@@ -44,7 +48,8 @@ export default {
     padding: 5em !important;
 }
 .login_form{
-    padding: 100px;
+    /* padding: 100px; */
+    margin-top: 1em;
 }
 #login_img{
     position: absolute;
@@ -54,7 +59,18 @@ export default {
 #login_img img{
     width: 100%;
     min-height: 100vh;
+    aspect-ratio: 1;
     /* width: calc(100% + 11vw);
     height: 100vh; */
+}
+#login_links{
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+#login_links a{
+    text-decoration: none;
+    color: #414042;
 }
 </style>
