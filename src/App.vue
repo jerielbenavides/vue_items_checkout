@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      links: [["Items", "items"],["Cart",'cart'],["Profile", 'profile'],["Logout", 'logout']]
+      links: [["Items", "loan"],["Cart",'cart'],["Profile", 'profile'],["Logout", 'logout']]
     }
   },
   methods: {
