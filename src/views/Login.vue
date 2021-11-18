@@ -1,5 +1,5 @@
 <template>
-    <div class="row container">
+    <div class="row container login_container">
         <div class="login_form col s12 m12 l3">
             <h5>EQUIPMENT SIGN OUT</h5>
             <p></p>
@@ -41,6 +41,9 @@ export default {
 </script>
 
 <style scoped>
+.login_container{
+    overflow: hidden;
+}
 .input-field input{
     /* border: 1px solid !important; */
 }

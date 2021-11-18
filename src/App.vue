@@ -40,7 +40,7 @@ export default {
   src: local("Oswald-Bold"),   url(./fonts/Oswald-Bold.ttf) format("truetype");
 }
 
-* { margin:0; padding:0; box-sizing:border-box; max-width: 100vw; max-height: 100vh; overflow:hidden}
+* { margin:0; padding:0; box-sizing:border-box; max-width: 100vw; max-height: 100vh; max-width: 100vw}
 
 html{
     scroll-behavior: smooth;  
