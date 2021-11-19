@@ -56,7 +56,7 @@ export default {
 }
 #login_img{
     position: absolute;
-    width: 80vw;
+    width: 70vw;
     padding-left: 10vw;
 }
 #login_img img{

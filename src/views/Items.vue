@@ -3,7 +3,7 @@
         <h5>CLICK ITEM TO ADD TO SHOPPING CART</h5>
         <div class="categories_container col s12 m12 l3">
             <div v-for="(category, index) in itemCategories" :key="index">
-                    <article :id="category"><h6>{{ itemCategories[index] }}</h6><div class="divider"></div></article> 
+                    <article :id="category" class="selectableItemCategory"><h6>{{ itemCategories[index] }}</h6><div class="divider"></div></article> 
             </div>
         </div>
         <div class="col s12 m12 l9">
@@ -43,7 +43,7 @@ export default {
     data() {
     return {
         itemCategories: ['DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods'],
-        exampleCategory: [{name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}]
+        exampleCategory: [{name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}]
     }
 },
 }
@@ -54,17 +54,22 @@ export default {
 .categories_container{
     margin-top: 1em;
     max-height: 75vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .items_container{
     /* padding: 100px; */
     margin-top: 1em;
     max-height: 65vh;
-    overflow-y: scroll;
+    overflow-y: auto;
+    padding: 5px;
 }
 .itemName{
     font-size: 1.5em;
     color: black;
+}
+.selectableItemCategory:hover{
+    color: #0B8261;
+    cursor: pointer;
 }
 #addtoCartbttn{
     margin-top: 1em;
