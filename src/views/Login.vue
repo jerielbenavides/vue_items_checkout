@@ -4,7 +4,7 @@
             <h5>EQUIPMENT SIGN OUT</h5>
             <p></p>
             <p id="login_errors"></p>
-            <form class="">
+            <form class="" @submit.prevent="submitLoginForm()">
                     <div class="input-field">
                         <input id="studentId" type="text" class="validate">
                         <label for="studentId">Student ID</label>
@@ -36,6 +36,14 @@ export default {
     name: 'Login',
     components: {
     // HelloWorld
+    },
+    methods: {
+        submitLoginForm: function(){
+            console.log('Submitting login form');
+            // TODO: Make this actually work
+            this.$emit("submitLoginForm", true);
+            this.$router.push({path: '/loan'});
+        }
     }
 }
 </script>

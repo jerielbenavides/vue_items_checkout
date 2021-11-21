@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Items from '../views/Items.vue'
 import Cart from '../views/Cart.vue'
 import Profile from '../views/Profile.vue'
+import Logout from '../views/Logout.vue'
 // import EditProfile from '../views/EditProfile.vue'
 
 Vue.use(VueRouter)
@@ -39,6 +40,16 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: Logout
+  },
+  {
+    path: '/',
+    name: 'Login',
+    component: Login
   },
   // {
   //   path: '/about',

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar :navItems="links"></Navbar>
-    <router-view/>
+    <router-view @submitLoginForm="showNavLinks"/>
     <Footer></Footer>
   </div>
 </template>
@@ -20,11 +20,21 @@ export default {
   },
   data() {
     return {
-      links: [["Items", "loan"],["Cart",'cart'],["Profile", 'profile'],["Logout", 'logout']]
+      links: [["Login", "login"]]
     }
   },
   methods: {
-
+    // BOX SITE ONLY: Show alternative navbar when not logged in...
+    showNavLinks: function(isLoggedIn){
+      if(isLoggedIn){
+        console.log('User logginh in');
+        this.links =  [["Items", "loan"],["Cart",'cart'],["Profile", 'profile'],["Logout", 'logout']];
+      }
+      else{
+        console.log('User logginh out');
+        this.links =  [["Login", "login"]];
+      }
+    }
   },
 }
 </script>

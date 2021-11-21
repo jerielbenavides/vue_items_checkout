@@ -1,7 +1,7 @@
 <template>
     <nav >
         <div class="nav-wrapper container">
-            <router-link id="logo-container" class="brand-logo" to="/login"><img src="../assets/dc-logo-white.png"></router-link>
+            <router-link id="logo-container" class="brand-logo" to="/loan"><img src="../assets/dc-logo-white.png"></router-link>
             <ul class="right hide-on-med-and-down">
                 <li v-for="(navItem, index) in navItems" :key="index">
                     <router-link :id="navItem[1]" v-bind:to="routeLinkGenerator(navItem[1])">{{ navItem[0].toUpperCase() }}</router-link> 
