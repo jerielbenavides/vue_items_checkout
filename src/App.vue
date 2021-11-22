@@ -75,6 +75,13 @@ h1{
 h5{
   font-family: Oswald-Bold;
 }
+p{
+  font-size: 1.3em;
+    color: #7e7e7e
+}
+.activeTab{
+  color: #0B8261;
+}
 @media only screen and (min-width: 993px){
 .container {
     width: 90% !important;

@@ -5,13 +5,13 @@
             <div>
                 <!-- <article id="viewLoans_tab" class="selectableItemCategory"><router-link to="/profile/loans">My Loans</router-link></article>
                 <article id="viewProfile_tab" class="selectableItemCategory"><router-link to="/profile/edit">Edit Profile</router-link><div class="divider"></div></article>  -->
-                <article id="viewLoans" class="selectableItemCategory"><a href="#" v-on:click="makeTabActive('viewLoans')"><h6>Your Loans</h6></a><div class="divider"></div></article> 
-                <article id="viewProfile" class="selectableItemCategory"><a href="#" v-on:click="makeTabActive('viewProfile')"><h6>Your Info</h6></a><div class="divider"></div></article> 
-                <article id="editProfile" class="selectableItemCategory"><a href="#" v-on:click="makeTabActive('editProfile')"><h6>Edit Profile</h6></a><div class="divider"></div></article> 
+                <article id="viewLoans" class="selectableItemCategory"><a href="#" v-on:click="makeTabActive('viewLoans')"><h6 :class="isActiveTab('viewLoans')? `activeTab`:  ``">Your Loans</h6></a><div class="divider"></div></article> 
+                <article id="viewProfile" class="selectableItemCategory"><a href="#" v-on:click="makeTabActive('viewProfile')"><h6 :class="isActiveTab('viewProfile')? `activeTab`:  ``">Your Info</h6></a><div class="divider"></div></article> 
+                <article id="editProfile" class="selectableItemCategory"><a href="#" v-on:click="makeTabActive('editProfile')"><h6 :class="isActiveTab('editProfile')? `activeTab`:  ``">Edit Profile</h6></a><div class="divider"></div></article> 
 
             </div>
         </div>
-        <div class="col s12 m12 l9">
+        <div class="col s12 m12 l9 profilePage">
                 <section id="loansTab" v-show="isActiveTab('viewLoans')">
                     <h5>Your Loans</h5>
                     <div class="profileContentArea">
@@ -86,7 +86,7 @@
                             <input id="edit_confirmNewPassword" type="password" >
                             <label for="edit_confirmNewPassword">Confirm New Password</label>
                         </div>
-                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+                    <button class="btn waves-effect waves-light" type="submit"  @click.prevent="makeTabActive('viewProfile')" name="action">Submit</button>
                     </form>
                 </section>            
         </div>
@@ -145,5 +145,8 @@ export default {
 }
 #addtoCartbttn{
     margin-top: 1em;
+}
+.profilePage{
+    margin-bottom: 50px;
 }
 </style>

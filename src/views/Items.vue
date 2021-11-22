@@ -3,7 +3,7 @@
         <h5>CLICK ITEM TO ADD TO SHOPPING CART</h5>
         <div class="categories_container col s12 m12 l3">
             <div v-for="(category, index) in itemCategories" :key="index">
-                    <article :id="category" class="selectableItemCategory"><h6>{{ itemCategories[index] }}</h6><div class="divider"></div></article> 
+                    <article :id="category" class="selectableItemCategory"><h6 v-on:click="makeTabActive(category)" :class="isActiveTab(category)? `activeTab`:  ``">{{ itemCategories[index] }}</h6><div class="divider"></div></article> 
             </div>
         </div>
         <div class="col s12 m12 l9">
@@ -28,7 +28,7 @@
                 </div>
             </div>
             
-            <button id="addtoCartbttn" class="btn waves-effect waves-light" type="submit" name="Continue">Continue</button>
+            <button id="addtoCartbttn" class="btn waves-effect waves-light" type="submit" name="Continue" @click="addCart()">Continue</button>
         </div>
     </div>
 </template>
@@ -41,11 +41,23 @@ export default {
 
     },
     data() {
-    return {
-        itemCategories: ['DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods'],
-        exampleCategory: [{name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}]
+        return {
+            activeTab: '',
+            itemCategories: ['DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods'],
+            exampleCategory: [{name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}]
+        }
+    },
+    methods: {
+        addCart: function(){
+            this.$router.push({path: '/cart'});
+        },
+        makeTabActive: function(val) {
+            this.activeTab = val;
+        },
+        isActiveTab: function(val) {
+            return this.activeTab === val;
+        }
     }
-},
 }
 </script>
 

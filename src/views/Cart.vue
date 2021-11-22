@@ -1,12 +1,13 @@
 <template>
     <div class="row container cart_container">
-        <div class="col s12 m12 l4">
+        <div class="col s12 m12 l8">
             <h5>YOUR CART</h5>
             <div class="items_container">
                 <div v-for="(item, index) in cartItems" :key="index">
                         <article class="categoryItems" :id="item">
-                            <div class="item">
-                                <label>
+                            <div class="item row">
+                                <i :id="`deleteCart-${item}`" class="material-icons col s1 m1 l1 deleteFromCart">delete</i>
+                                <label class="col s11 m11 l11">
                                     <span>
                                         <p class="itemName">{{ cartItems[index]['name'] }}</p>
                                         <!-- TODO: Replace with current date and time -->
@@ -14,9 +15,7 @@
                                         <p> Sign Out Date: 18 November 2021, 08:12</p>
                                         <p> Return Date: {{ cartItems[index]['returnDate'] }}</p>
                                     </span>
-                                    <i :id="`deleteCart-${item}`" class="material-icons deleteFromCart">delete</i>
                                 </label>
-                                
                             </div>
                         
                             <div class="divider"></div>
@@ -24,11 +23,11 @@
                 </div>
             </div>
             
-            <button id="addtoCartbttn" class="btn waves-effect waves-light" type="submit" name="Continue">Checkout</button>
+            <button id="checkOutBttn" class="btn waves-effect waves-light" type="submit" name="Continue">Checkout</button>
         </div>
-        <div class="col l8 hide-on-med-and-down">
+        <div class="col l4 hide-on-med-and-down">
             <div id="cart_img">
-                <img src="../assets/camera.jpg">
+                <img src="../assets/camera-tall.jpg">
             </div>
         </div>
     </div>
@@ -48,7 +47,14 @@ export default {
         {name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'},
         {name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'}]
     }
-}
+    },
+    methods: {
+        checkOut: function(){
+            //Clear cart.
+            //Show popup
+            // this.$router.push({path: '/cart'});
+        }
+    }
 }
 </script>
 
@@ -58,7 +64,7 @@ export default {
 }
 #cart_img{
     position: absolute;
-    width: 62.5vw;
+    width: 35vw;
 }
 #cart_img img{
     width: 100%;
@@ -73,15 +79,24 @@ export default {
     max-height: 65vh;
     overflow-y: auto;
 }
+.item{
+    display: flex;
+    place-items: center;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
 .itemName{
     font-size: 1.5em;
     color: black;
 }
-#addtoCartbttn{
+#checkOutBttn{
     margin-top: 1em;
 }
 .deleteFromCart:hover{
     color: red;
     cursor: pointer;
+}
+.items_container div{
+    width: 100%;
 }
 </style>
