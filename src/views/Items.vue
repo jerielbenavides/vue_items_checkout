@@ -10,10 +10,12 @@
             <h5>Items Category goes here</h5>
             <div class="items_container">
                 <div v-for="(item, index) in exampleCategory" :key="index">
-                        <article class="categoryItems" :id="item">
+                        <article class="categoryItems" :id="index">
                             <div class="item">
                                 <label>
-                                    <input type="checkbox" :id="`category-${item}`" />
+                                    <input v-show="parseInt(exampleCategory[index]['available']) > 0" type="checkbox" :id="`item#-${index}`"/>
+                                    <!-- <input v-show="parseInt(exampleCategory[index]['available']) > 0" type="checkbox" :id="`item#-${index}`"/>
+                                    <input v-show="parseInt(exampleCategory[index]['available']) <= 0" type="checkbox" :id="`item#-${index}`" disabled="disabled" /> -->
                                     <span>
                                         <p class="itemName">{{ exampleCategory[index]['name'] }}</p>
                                         <!-- TODO: Substract 1 from total when checking checkbox -->

@@ -58,7 +58,7 @@ html{
     font-family: Lato-Regular;                    
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Lato-Regular, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -81,6 +81,44 @@ p{
 }
 .activeTab{
   color: #0B8261;
+}
+/* ALERT STYLES */
+.alertConfirm{
+    position: absolute !important;
+    left: 25px !important;
+    background-color: #0B8261 !important;
+}
+#modalDiv{
+  font-family: 'Lato-Regular';
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.alertActionButtons{
+    margin-bottom: 1em !important;
+}
+.alertTitle{
+    display: flex !important;
+    text-align: left;
+    font-family: 'Oswald-Bold';
+}
+.swal2-close{
+    position: absolute;
+    right: 4;
+    top: 4;
+    background-color: #0B8261 !important;
+    border: none;
+}
+.reservedItems{
+    max-height: 10em !important;
+}
+#swal2-html-container{
+  margin-top: 0em !important;
+}
+.alertFooter{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 @media only screen and (min-width: 993px){
 .container {

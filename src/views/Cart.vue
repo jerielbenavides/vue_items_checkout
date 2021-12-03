@@ -23,7 +23,7 @@
                 </div>
             </div>
             
-            <button id="checkOutBttn" class="btn waves-effect waves-light" type="submit" name="Continue">Checkout</button>
+            <button id="checkOutBttn" class="btn waves-effect waves-light" type="submit"  @click.prevent="checkOut()" name="Continue">Checkout</button>
         </div>
         <div class="col l4 hide-on-med-and-down">
             <div id="cart_img">
@@ -50,9 +50,49 @@ export default {
     },
     methods: {
         checkOut: function(){
+            console.log('Cool! Reserving your stuff...')
             //Clear cart.
             //Show popup
-            // this.$router.push({path: '/cart'});
+            //build list element
+            let itemsList = '';
+            for(let i = 0; i < this.cartItems.length; i++){
+                itemsList += `<p> ${this.cartItems[i]['name']}</p>`;
+            }
+                        for(let i = 0; i < this.cartItems.length; i++){
+                itemsList += `<p> ${this.cartItems[i]['name']}</p>`;
+            }
+                        for(let i = 0; i < this.cartItems.length; i++){
+                itemsList += `<p> ${this.cartItems[i]['name']}</p>`;
+            }
+            this.$swal.fire({
+                title: '<strong>DONE</strong>',
+                icon: 'none',
+                html:
+                    `<div id="modalDiv"> 
+                        <h5>You have reserved the following items:</h5>
+                        <div class="reservedItems">
+                            ${itemsList}
+                        </div>
+                    </div>`,
+                footer: `<footer>
+                            <p>Please go to room L142 before 13:43</p>
+                            <p>Bring your student ID</p>
+                        </footer>`,
+                showCloseButton: true,
+                focusConfirm: false,
+                confirmButtonText:'CONTINUE',
+                customClass: {
+                    container: 'alertContentContainer',
+                    popup: '...',
+                    header: '...',
+                    title: 'alertTitle',
+                    actions: 'alertActionButtons',
+                    confirmButton: 'alertConfirm',
+                    denyButton: 'alertDeny',
+                    cancelButton: 'alertCancel',
+                    footer: 'alertFooter',
+                    }
+                })
         }
     }
 }
@@ -99,4 +139,6 @@ export default {
 .items_container div{
     width: 100%;
 }
+
+
 </style>
