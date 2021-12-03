@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Navbar :navItems="links"></Navbar>
-    <router-view @submitLoginForm="showNavLinks"/>
+    <Navbar :navItems="links" :cartItems="cartItems"></Navbar>
+    <router-view @itemSelected="onItemSelected" @submitLoginForm="showNavLinks"/>
     <Footer></Footer>
   </div>
 </template>
@@ -20,20 +20,25 @@ export default {
   },
   data() {
     return {
-      links: [["Login", "login"]]
+      links: [["Login", "login"]],
+      cartItems: []
     }
   },
   methods: {
     // BOX SITE ONLY: Show alternative navbar when not logged in...
     showNavLinks: function(isLoggedIn){
       if(isLoggedIn){
-        console.log('User logginh in');
-        this.links =  [["Items", "loan"],["Cart",'cart'],["Profile", 'profile'],["Logout", 'logout']];
+        console.log('User logging in');
+        this.links =  [["Items", "loan"],[`Cart`,'cart'],["Profile", 'profile'],["Logout", 'logout']];
       }
       else{
-        console.log('User logginh out');
+        console.log('User logging out');
         this.links =  [["Login", "login"]];
       }
+    },
+    onItemSelected: function(cartItems){
+      this.cartItems = cartItems;
+      this.links =  [["Items", "loan"],[`Cart (${this.cartItems.length})`,'cart'],["Profile", 'profile'],["Logout", 'logout']];
     }
   },
 }

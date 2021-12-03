@@ -36,6 +36,9 @@ export default {
         navItems: {
             type: Array
         },
+        cartItems: {
+            type: Array
+        },
     },
     methods: {
         routeLinkGenerator: function (navName){
