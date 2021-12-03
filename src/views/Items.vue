@@ -2,32 +2,32 @@
     <div class="row container">
         <h5>CLICK ITEM TO ADD TO SHOPPING CART</h5>
         <div class="categories_container col s12 m12 l3">
-            <div v-for="(category, index) in itemCategories" :key="index">
-                    <article :id="category" class="selectableItemCategory"><h6 v-on:click="makeTabActive(category)" :class="isActiveTab(category)? `activeTab`:  ``">{{ itemCategories[index] }}</h6><div class="divider"></div></article> 
+            <div v-for="(value, propertyName, index) in itemCategories['categories']" :key="index">
+                    <article :id="'categoryTab_' + value['id']" class="selectableItemCategory"><h6 v-on:click="makeTabActive(value['name'], value['id'])" :class="isActiveTab(value['id'])? `activeTab`:  ``">{{ value['name'] }}</h6><div class="divider"></div></article> 
             </div>
         </div>
         <div class="col s12 m12 l9">
-            <h5>Items Category goes here</h5>
+            <h5>{{categoryName}}</h5>
             <div class="items_container">
-                <div v-for="(item, index) in exampleCategory" :key="index">
-                        <article class="categoryItems" :id="index">
-                            <div class="item">
-                                <label>
-                                    <input v-if="parseInt(exampleCategory[index]['available']) > 0" type="checkbox" :id="`item#-${index}`"/>
-                                    <input v-else type="checkbox" :id="`item#-${index}`" disabled/>
-                                    <!-- <input v-show="parseInt(exampleCategory[index]['available']) > 0" type="checkbox" :id="`item#-${index}`"/>
-                                    <input v-show="parseInt(exampleCategory[index]['available']) <= 0" type="checkbox" :id="`item#-${index}`" disabled="disabled" /> -->
-                                    <span v-bind:class="{ isDisabled:  parseInt(exampleCategory[index]['available']) == 0}">
-                                        <p class="itemName">{{ exampleCategory[index]['name'] }}</p>
-                                        <!-- TODO: Substract 1 from total when checking checkbox -->
-                                        <p> Available: {{ exampleCategory[index]['available'] }}</p>
-                                    </span>
-                                </label>
-                                
-                            </div>
-                        
-                            <div class="divider"></div>
-                        </article> 
+                <div v-for="(item, index) in itemsList" :key="index">
+                    <article class="categoryItems" :id="index">
+                        <div class="item">
+                            <label>
+                                <input v-if="parseInt(itemsList[index]['assets_count_available']) > 0" type="checkbox" v-model="checkedItems" :id="`item#-${categoryId}-${index}`" :value="`${categoryId}item#${index}`" :checked="true"/>
+                                <input v-else type="checkbox" v-model="checkedItems" :id="`item#-${categoryId}-${index}`" :value="`${categoryId}item#${index}`" :checked="true" disabled/>
+                                <!-- <input v-show="parseInt(exampleCategory[index]['available']) > 0" type="checkbox" :id="`item#-${index}`"/>
+                                <input v-show="parseInt(exampleCategory[index]['available']) <= 0" type="checkbox" :id="`item#-${index}`" disabled="disabled" /> -->
+                                <span v-bind:class="{ isDisabled:  parseInt(itemsList[index]['assets_count_available']) == 0}">
+                                    <p class="itemName">{{ itemsList[index]['asset_description'] }}</p>
+                                    <!-- TODO: Substract 1 from total when checking checkbox -->
+                                    <p> Available: {{ itemsList[index]['assets_count_available'] }}</p>
+                                </span>
+                            </label>
+                            
+                        </div>
+                    
+                        <div class="divider"></div>
+                    </article> 
                 </div>
             </div>
             
@@ -46,19 +46,30 @@ export default {
     data() {
         return {
             activeTab: '',
-            itemCategories: ['DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods', 'DLSRs', 'Camera Tripods', 'Cameras', 'Video Tripods', 'Microphone Tripods'],
-            exampleCategory: [{name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Canon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}, {name: 'Cannon HD Cam Recorder', available: 3}, {name: 'Camera Tripod', available: 1}, {name: 'Microphone', available: 0}]
+            categoryName: '',
+            checkedItems: [],
+            categoryId: 0,
+            itemsList: [],
+            itemCategories:   { 'categories': {
+                                    '1': {'id':'1', 'name': 'DLSRs', 'assets': [{'asset_description':'Canon Digital Rebel T3', "assets_count": "16","assets_count_available": 0}, {'asset_description':'Microphone', "assets_count": "16","assets_count_available": 6}]},
+                                    '2': {'id':'2', 'name': 'Laptops', 'assets': [{'asset_description':'Powerful laptop', "assets_count": "9","assets_count_available": 2}, {'asset_description':'Weak Laptop', "assets_count": "12","assets_count_available": 0}]}
+                                    }
+                                }
         }
     },
     methods: {
         addCart: function(){
             this.$router.push({path: '/cart'});
         },
-        makeTabActive: function(val) {
-            this.activeTab = val;
+        makeTabActive: function(catName,id) {
+            this.activeTab = `categoryTab_${id}`;
+            //Get list of items in category
+            this.itemsList = this.itemCategories['categories'][id]['assets'];
+            this.categoryName = catName;
+            this.categoryId = id;
         },
-        isActiveTab: function(val) {
-            return this.activeTab === val;
+        isActiveTab: function(id) {
+            return this.activeTab === `categoryTab_${id}`;
         }
     }
 }
