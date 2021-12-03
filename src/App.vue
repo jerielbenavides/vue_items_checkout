@@ -120,6 +120,10 @@ p{
   flex-direction: column;
   text-align: left;
 }
+/* Disabled items */
+.isDisabled p{
+      color: #9e9e9e !important;
+}
 @media only screen and (min-width: 993px){
 .container {
     width: 90% !important;

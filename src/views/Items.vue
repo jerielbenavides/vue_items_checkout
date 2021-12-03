@@ -13,10 +13,11 @@
                         <article class="categoryItems" :id="index">
                             <div class="item">
                                 <label>
-                                    <input v-show="parseInt(exampleCategory[index]['available']) > 0" type="checkbox" :id="`item#-${index}`"/>
+                                    <input v-if="parseInt(exampleCategory[index]['available']) > 0" type="checkbox" :id="`item#-${index}`"/>
+                                    <input v-else type="checkbox" :id="`item#-${index}`" disabled/>
                                     <!-- <input v-show="parseInt(exampleCategory[index]['available']) > 0" type="checkbox" :id="`item#-${index}`"/>
                                     <input v-show="parseInt(exampleCategory[index]['available']) <= 0" type="checkbox" :id="`item#-${index}`" disabled="disabled" /> -->
-                                    <span>
+                                    <span v-bind:class="{ isDisabled:  parseInt(exampleCategory[index]['available']) == 0}">
                                         <p class="itemName">{{ exampleCategory[index]['name'] }}</p>
                                         <!-- TODO: Substract 1 from total when checking checkbox -->
                                         <p> Available: {{ exampleCategory[index]['available'] }}</p>
