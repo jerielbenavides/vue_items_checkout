@@ -23,13 +23,15 @@ const routes = [
   // },
   {
     path: '/loan',
-    name: 'Items',
-    component: Items
+    name: 'loan',
+    component: Items,
+    props: true
   },
   {
     path: '/cart',
-    name: Cart,
-    component: Cart
+    name: 'cart',
+    component: Cart,
+    props: true
   },
   // {
   //   path: '/profile/edit',
@@ -38,17 +40,18 @@ const routes = [
   // },
   {
     path: '/profile',
-    name: 'Profile',
-    component: Profile
+    name: 'profile',
+    component: Profile,
+    props: true
   },
   {
     path: '/logout',
-    name: 'Logout',
+    name: 'logout',
     component: Logout
   },
   {
     path: '/',
-    name: 'Login',
+    name: 'login',
     component: Login
   },
   // {

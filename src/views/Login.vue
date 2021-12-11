@@ -6,11 +6,13 @@
             <p id="login_errors"></p>
             <form class="" @submit.prevent="submitLoginForm()">
                     <div class="input-field">
-                        <input id="studentId" type="text" class="validate">
+                        <input id="studentId" type="text" v-model="formData['id']" class="validate">
+                        <span v-if="this.formErrors['id']" class="errorSpan">{{ this.formErrors['id'] }}</span>
                         <label for="studentId">Student ID</label>
                     </div>
                     <div class="input-field">
-                        <input id="password" password="Password" type="password" class="validate">
+                        <input id="password" password="Password" type="password" v-model="formData['password']" class="validate">
+                        <span v-if="this.formErrors['password']" class="errorSpan">{{ this.formErrors['password'] }}</span>
                         <label for="password">Password</label>
                     </div>
                     <button class="btn waves-effect waves-light" type="submit" name="action">Sign In</button>
@@ -37,12 +39,44 @@ export default {
     components: {
     // HelloWorld
     },
+    data() {
+        return {
+            isLoggedIn: false,
+            formData: {'id': '', 'password': ''},
+            formErrors: {'id': '', 'password': ''},
+        }
+    },
+    mounted() {
+        //Convert cartItems to studentCartItems
+        this.isLoggedIn = false
+    },
     methods: {
         submitLoginForm: function(){
             console.log('Submitting login form');
-            // TODO: Make this actually work
-            this.$emit("submitLoginForm", true);
-            this.$router.push({path: '/loan'});
+            //Check errors 
+            let errors = false;
+            if (!this.formData['id']){
+                this.formErrors['id']= 'Please complete this field';
+                errors = true;
+            }
+            else{
+                this.formErrors['id']= '';
+            }
+            if (!this.formData['password']){
+                this.formErrors['password']= 'Please complete this field';
+                errors = true;
+            }
+            else{
+                //TODO: Validate Password?
+                this.formErrors['password']= '';
+            }
+            if(!errors){
+                // TODO: Make this actually work using the server
+                this.isLoggedIn = true;
+                this.$emit("submitLoginForm", this.isLoggedIn);
+                this.$router.push({ name: 'loan', params: {isLoggedIn: this.isLoggedIn }});
+            }
+
         }
     }
 }

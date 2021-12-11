@@ -1,32 +1,20 @@
 <template>
     <nav >
         <div class="nav-wrapper container">
-            <router-link id="logo-container" class="brand-logo" to="/loan"><img src="../assets/dc-logo-white.png"></router-link>
+            <router-link id="logo-container" class="brand-logo" to="#"><img src="../assets/dc-logo-white.png"></router-link>
             <ul class="right hide-on-med-and-down">
                 <li v-for="(navItem, index) in navItems" :key="index">
-                    <router-link :id="navItem[1]" v-bind:to="routeLinkGenerator(navItem[1])">{{ navItem[0].toUpperCase() }}</router-link> 
+                    <router-link :id="navItem[1]"  v-bind:to="{ name: routeLinkGenerator(navItem[1]), params: {cartItems: cartItems, isLoggedIn: isLoggedIn } }">{{ navItem[0].toUpperCase() }}</router-link> 
                 </li>
             </ul>
             <ul id="nav-mobile" class="sidenav">
                 <li v-for="(navItem, index) in navItems" :key="index">
-                    <router-link :id="navItem[1]" v-bind:to="routeLinkGenerator(navItem[1])">{{ navItem[0].toUpperCase() }}</router-link> 
+                    <router-link :id="navItem[1]" v-bind:to="{ name: routeLinkGenerator(navItem[1]), params: {cartItems: cartItems, isLoggedIn: isLoggedIn }}" >{{ navItem[0].toUpperCase() }}</router-link> 
                 </li>
             </ul>
             <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         </div>
     </nav>
-    <!-- <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-
-      <ul id="nav-mobile" class="sidenav">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-    </div>
-  </nav> -->
 </template>
 
 <script>
@@ -39,10 +27,18 @@ export default {
         cartItems: {
             type: Array
         },
+        isLoggedIn: {
+            type: Boolean
+        },
     },
+    // data() {
+    //     return {
+    //     artItems: cartItems,
+    //     }
+    // },
     methods: {
         routeLinkGenerator: function (navName){
-            return `/${navName}`;
+            return `${navName}`;
         }
     }
 }

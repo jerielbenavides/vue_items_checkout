@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar :navItems="links" :cartItems="cartItems"></Navbar>
+    <Navbar :navItems="links" :cartItems="cartItems" :isLoggedIn= this.isLoggedIn></Navbar>
     <router-view @itemSelected="onItemSelected" @submitLoginForm="showNavLinks"/>
     <Footer></Footer>
   </div>
@@ -20,6 +20,7 @@ export default {
   },
   data() {
     return {
+      isLoggedIn: false,
       links: [["Login", "login"]],
       cartItems: []
     }
@@ -27,6 +28,7 @@ export default {
   methods: {
     // BOX SITE ONLY: Show alternative navbar when not logged in...
     showNavLinks: function(isLoggedIn){
+      this.isLoggedIn = isLoggedIn;
       if(isLoggedIn){
         console.log('User logging in');
         this.links =  [["Items", "loan"],[`Cart`,'cart'],["Profile", 'profile'],["Logout", 'logout']];
@@ -34,6 +36,7 @@ export default {
       else{
         console.log('User logging out');
         this.links =  [["Login", "login"]];
+        this.cartItems = []; //Clearing the cart on logout.
       }
     },
     onItemSelected: function(cartItems){
@@ -128,6 +131,13 @@ p{
 /* Disabled items */
 .isDisabled p{
       color: #9e9e9e !important;
+}
+.errorSpan{
+  background: #f9c3c3;
+  width: 100%;
+  display: inherit;
+  padding-left: 5px;
+  color: darkred;
 }
 @media only screen and (min-width: 993px){
 .container {

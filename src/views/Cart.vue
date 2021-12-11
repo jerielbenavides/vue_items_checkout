@@ -3,17 +3,17 @@
         <div class="col s12 m12 l8">
             <h5>YOUR CART</h5>
             <div class="items_container">
-                <div v-for="(item, index) in cartItems" :key="index">
-                        <article class="categoryItems" :id="item">
+                <div v-for="(item, index) in studentCartItems" :key="index">
+                        <article class="categoryItems" :id="index">
                             <div class="item row">
-                                <i :id="`deleteCart-${item}`" class="material-icons col s1 m1 l1 deleteFromCart">delete</i>
+                                <i :id="`deleteCart-${index}`" @click="removeFromCart(index)" class="material-icons col s1 m1 l1 deleteFromCart">delete</i>
                                 <label class="col s11 m11 l11">
                                     <span>
-                                        <p class="itemName">{{ cartItems[index]['name'] }}</p>
+                                        <p class="itemName">{{ studentCartItems[index]['asset_description'] }}</p>
                                         <!-- TODO: Replace with current date and time -->
                                         <!-- Note: This is not really needed IMO -->
-                                        <p> Sign Out Date: 18 November 2021, 08:12</p>
-                                        <p> Return Date: {{ cartItems[index]['returnDate'] }}</p>
+                                        <p> Sign Out Date: {{getTodaysDate()}}</p>
+                                        <p> Return Date: {{getReturnsDate()}}</p>
                                     </span>
                                 </label>
                             </div>
@@ -23,7 +23,8 @@
                 </div>
             </div>
             
-            <button id="checkOutBttn" class="btn waves-effect waves-light" type="submit"  @click.prevent="checkOut()" name="Continue">Checkout</button>
+            <button v-if="this.studentCartItems.length>0" id="checkOutBttn" class="btn waves-effect waves-light" type="submit"  @click.prevent="checkOut()" name="Continue">Checkout</button>
+            <p v-else>Your cart is empty</p>
         </div>
         <div class="col l4 hide-on-med-and-down">
             <div id="cart_img">
@@ -37,50 +38,72 @@
 
 export default {
     name: 'Cart',
+    props: {
+        cartItems: {
+            type: Array
+        },
+        isLoggedIn: {
+            type: Boolean,
+        }, 
+    },
     components: {
     },
     data() {
     return {
-        // TODO: The text date here is an example. Make a parse date method and parse the date object coming from db/api
-        cartItems: [{name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'},
-        {name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'},
-        {name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'},
-        {name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'}]
+        studentCartItems: this.cartItems ? this.cartItems : []
+    //     // TODO: The text date here is an example. Make a parse date method and parse the date object coming from db/api
+    //     cartItems: [{name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'},
+    //     {name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'},
+    //     {name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'},
+    //     {name: 'Canon HD Cam Recorder', returnDate: '20 November 2021, 08:20'}, {name: 'Camera Tripod', returnDate: '20 November 2021, 08:20'}, {name: 'Microphone', returnDate: '20 November 2021, 08:20'}]
+    // 
     }
     },
+    created() {
+        if(!this.isLoggedIn){
+            this.$router.push({ name: 'logout', params: {}});
+        }
+    },
+    mounted() {
+        console.log(this.studentCartItems);
+    },
     methods: {
+        getTodaysDate: function() {
+            let time = new Date();
+            return `${time.toDateString()} ${time.getHours()}:${time.getMinutes()}`;
+        },
+        getReturnsDate: function() {
+            let time = new Date();
+            time.setHours(time.getHours()+48); 
+            return `${time.toDateString()} ${time.getHours()}:${time.getMinutes()}`;
+        },
         checkOut: function(){
             console.log('Cool! Reserving your stuff...')
-            //Clear cart.
+            //TODO: Save to the server
+
             //Show popup
             //build list element
             let itemsList = '';
-            for(let i = 0; i < this.cartItems.length; i++){
-                itemsList += `<p> ${this.cartItems[i]['name']}</p>`;
-            }
-                        for(let i = 0; i < this.cartItems.length; i++){
-                itemsList += `<p> ${this.cartItems[i]['name']}</p>`;
-            }
-                        for(let i = 0; i < this.cartItems.length; i++){
-                itemsList += `<p> ${this.cartItems[i]['name']}</p>`;
+            //Pick up time
+            let time = new Date();
+            time.setHours(time.getHours()+2); 
+            let pickUpTime = `${time.getHours()}:${time.getMinutes()}`;
+            for(let i = 0; i < this.studentCartItems.length; i++){
+                itemsList += `<p> ${this.studentCartItems[i]['asset_description']}</p>`;
             }
             this.$swal.fire({
-                title: '<strong>DONE</strong>',
-                icon: 'none',
+                title: '<strong>Are you sure?</strong>',
+                icon: 'question',
                 html:
                     `<div id="modalDiv"> 
-                        <h5>You have reserved the following items:</h5>
+                        <h5>You are about to reserve the following items:</h5>
                         <div class="reservedItems">
                             ${itemsList}
                         </div>
                     </div>`,
-                footer: `<footer>
-                            <p>Please go to room L142 before 13:43</p>
-                            <p>Bring your student ID</p>
-                        </footer>`,
                 showCloseButton: true,
                 focusConfirm: false,
-                confirmButtonText:'CONTINUE',
+                confirmButtonText:'YES',
                 customClass: {
                     container: 'alertContentContainer',
                     popup: '...',
@@ -93,6 +116,47 @@ export default {
                     footer: 'alertFooter',
                     }
                 })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        this.$swal.fire({
+                            title: '<strong>DONE</strong>',
+                            icon: 'none',
+                            html:
+                                `<div id="modalDiv"> 
+                                    <h5>You have reserved the following items:</h5>
+                                    <div class="reservedItems">
+                                        ${itemsList}
+                                    </div>
+                                </div>`,
+                            footer: `<footer>
+                                        <p>Please go to room L142 before ${pickUpTime}</p>
+                                        <p>Bring your student ID</p>
+                                    </footer>`,
+                            showCloseButton: true,
+                            focusConfirm: false,
+                            confirmButtonText:'CONTINUE',
+                            customClass: {
+                                container: 'alertContentContainer',
+                                popup: '...',
+                                header: '...',
+                                title: 'alertTitle',
+                                actions: 'alertActionButtons',
+                                confirmButton: 'alertConfirm',
+                                denyButton: 'alertDeny',
+                                cancelButton: 'alertCancel',
+                                footer: 'alertFooter',
+                                }
+                            })
+
+                        //Clear local variables.
+                        this.studentCartItems = [];
+                        this.$emit("itemSelected", this.studentCartItems);
+                    }
+                });
+        },
+        removeFromCart: function(index){
+            this.studentCartItems.splice(index, 1);
+            this.$emit("itemSelected", this.studentCartItems);
         }
     }
 }
