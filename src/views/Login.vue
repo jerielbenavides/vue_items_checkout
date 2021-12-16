@@ -63,7 +63,6 @@ export default {
     },
     methods: {
         submitLoginForm: function(){
-            console.log('Submitting login form');
             //Check errors 
             let errors = false;
             if (!this.formData['id']){
@@ -84,7 +83,6 @@ export default {
             if(!errors){
                 let student_id = this.formData['id'];
                 let password = this.formData['password'];
-                console.log(`Attempting to login with id: ${student_id} and password: ${password}`);
                 const options = {
                     url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/login.php",
                     method: "POST",
@@ -109,7 +107,7 @@ export default {
                             this.borrower.program_year  = res.data.borrower.program_year;                         
                             this.isLoggedIn = true;
                             this.$emit("submitLoginForm", this.isLoggedIn, this.borrower);
-                            this.$router.push({ name: 'loan', params: {isLoggedIn: this.isLoggedIn }});
+                            this.$router.push({ name: 'loan', params: {isLoggedIn: this.isLoggedIn, borrower: this.borrower }});
                             break;
                         case 1:
                             this.formErrors['general']= "No Student ID or Password were entered.";

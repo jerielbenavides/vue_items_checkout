@@ -41,13 +41,21 @@ export default {
       this.isLoggedIn = isLoggedIn;
       if(isLoggedIn){
         this.borrower = borrower;
-        console.log('User logging in');
         this.links =  [["Items", "loan"],[`Cart`,'cart'],["Profile", 'profile'],["Logout", 'logout']];
       }
       else{
-        console.log('User logging out');
         this.links =  [["Login", "login"]];
         this.cartItems = []; //Clearing the cart on logout.
+        this.borrower = { //Clear the borrower object
+          firstName: "",
+          lastName: "",
+          borrower_id: "",
+          dc_email: "",
+          other_email: "",
+          student_id: "",
+          program_name: "",
+          program_year: "",
+        }
       }
     },
     onItemSelected: function(cartItems){

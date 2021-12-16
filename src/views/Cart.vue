@@ -45,6 +45,9 @@ export default {
         isLoggedIn: {
             type: Boolean,
         }, 
+        borrower: {
+            type: Object
+        },
     },
     components: {
     },
@@ -65,28 +68,26 @@ export default {
         }
     },
     mounted() {
-        console.log(this.studentCartItems);
+        // console.log(this.studentCartItems);
     },
     methods: {
         getTodaysDate: function() {
             let time = new Date();
-            return `${time.toDateString()} ${time.getHours()}:${time.getMinutes()}`;
+            return time.toLocaleString('en-CA', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'}); 
         },
         getReturnsDate: function() {
             let time = new Date();
-            time.setHours(time.getHours()+48); 
-            return `${time.toDateString()} ${time.getHours()}:${time.getMinutes()}`;
+            time.setHours(time.getHours()+72); 
+            let returnDate = time.toLocaleString('en-CA', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'}); 
+            return returnDate;
         },
         checkOut: function(){
-            console.log('Cool! Reserving your stuff...')
-            //TODO: Save to the server
-
             //Show popup
             //build list element
             let itemsList = '';
             //Pick up time
             let time = new Date();
-            time.setHours(time.getHours()+2); 
+            time.setMinutes(time.getMinutes()+20); 
             let pickUpTime = `${time.getHours()}:${time.getMinutes()}`;
             for(let i = 0; i < this.studentCartItems.length; i++){
                 itemsList += `<p> ${this.studentCartItems[i]['asset_description']}</p>`;
@@ -118,39 +119,75 @@ export default {
                 })
                 .then((result) => {
                     if (result.isConfirmed) {
-                        this.$swal.fire({
-                            title: '<strong>DONE</strong>',
-                            icon: 'none',
-                            html:
-                                `<div id="modalDiv"> 
-                                    <h5>You have reserved the following items:</h5>
-                                    <div class="reservedItems">
-                                        ${itemsList}
-                                    </div>
-                                </div>`,
-                            footer: `<footer>
-                                        <p>Please go to room L142 before ${pickUpTime}</p>
-                                        <p>Bring your student ID</p>
-                                    </footer>`,
-                            showCloseButton: true,
-                            focusConfirm: false,
-                            confirmButtonText:'CONTINUE',
-                            customClass: {
-                                container: 'alertContentContainer',
-                                popup: '...',
-                                header: '...',
-                                title: 'alertTitle',
-                                actions: 'alertActionButtons',
-                                confirmButton: 'alertConfirm',
-                                denyButton: 'alertDeny',
-                                cancelButton: 'alertCancel',
-                                footer: 'alertFooter',
-                                }
-                            })
+                        let asset_list = "";
+                        this.studentCartItems.forEach(function (item) {
+                            if (asset_list == "") {
+                            asset_list = item.asset_description;
+                            } else {
+                            asset_list += "|" + item.asset_description;
+                            }
+                        });
+                        const options = {
+                            url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/add_assets_logged_out.php",
+                            method: "POST",
+                            data: {
+                            student_id: this.borrower.student_id,
+                            assets: asset_list,
+                            },
+                        };
 
-                        //Clear local variables.
-                        this.studentCartItems = [];
-                        this.$emit("itemSelected", this.studentCartItems);
+                        this.$axios(options)
+                            .then((res) => {
+                            switch (res.data.error.id) {
+                                case 0:
+                                    this.$swal.fire({
+                                        title: '<strong>DONE</strong>',
+                                        icon: 'none',
+                                        html:
+                                            `<div id="modalDiv"> 
+                                                <h5>You have reserved the following items:</h5>
+                                                <div class="reservedItems">
+                                                    ${itemsList}
+                                                </div>
+                                            </div>`,
+                                        footer: `<footer>
+                                                    <p>Please go to room L142 before ${pickUpTime}</p>
+                                                    <p>Bring your student ID</p>
+                                                </footer>`,
+                                        showCloseButton: true,
+                                        focusConfirm: false,
+                                        confirmButtonText:'CONTINUE',
+                                        customClass: {
+                                            container: 'alertContentContainer',
+                                            popup: '...',
+                                            header: '...',
+                                            title: 'alertTitle',
+                                            actions: 'alertActionButtons',
+                                            confirmButton: 'alertConfirm',
+                                            denyButton: 'alertDeny',
+                                            cancelButton: 'alertCancel',
+                                            footer: 'alertFooter',
+                                            }
+                                        })
+                                        .then((result) => {
+                                            if (result.isConfirmed) {
+                                                this.$router.push({ name: 'profile', params: {isLoggedIn: this.isLoggedIn, borrower: this.borrower }});
+                                            }
+                                        });
+
+                                    //Clear local variables.
+                                    this.studentCartItems = [];
+                                    this.$emit("itemSelected", this.studentCartItems);
+                                    break;
+                                /* add other responses here */
+                                default:
+                                alert("Something went wrong with reserving your items.");
+                                break;
+                            }
+                            })
+                            .catch((err) => {
+                            console.error("Get Assets Failed." + err);
+                            });
                     }
                 });
         },

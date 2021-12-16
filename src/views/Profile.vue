@@ -1,5 +1,5 @@
 <template>
-    <div class="row container">
+    <div v-if="!isFetching" class="row container">
         <h5>WELCOME, {{userData['firstName'].toUpperCase()}} {{userData['lastName'].toUpperCase()}}</h5>
         <div class="categories_container col s12 m12 l3">
             <div>
@@ -13,7 +13,25 @@
         </div>
         <div class="col s12 m12 l9 profilePage">
                 <section id="loansTab" v-show="isActiveTab('viewLoans')">
-                    <h5>Your Loans</h5>
+                    <h5 v-if="(this.bin && this.bin.length>0)">Ready to Pick Up</h5>
+                    <div class="profileContentArea">
+                        <div v-for="(item, index) in  bin" :key="index">
+                        <article :id="item">
+                            <div class="item">
+                                <label>
+                                    <span>
+                                        <p class="itemName">{{  bin[index]['asset_description'] }}</p>
+                                        <p> Reservation Date: {{ bin[index]['date'] }}</p>
+                                        <p> Pick Up By: {{ getReturnsDate(bin[index]['start_date']) }}</p>                                                                                                                                                             
+                                    </span>
+                                </label>
+                            </div>
+                        
+                            <div class="divider"></div>
+                        </article> 
+                        </div>
+                    </div>
+                    <h5 v-if="(this.itemsLoaned && this.itemsLoaned.length>0)">Your Loans</h5>
                     <div class="profileContentArea">
                         <div v-for="(item, index) in  itemsLoaned" :key="index">
                         <article :id="item">
@@ -33,8 +51,9 @@
                         
                             <div class="divider"></div>
                         </article> 
-                </div>
+                        </div>
                     </div>
+                    <div class="empty"></div>
 
                 </section>
                 <section id="profileViewTab" v-show="isActiveTab('viewProfile')">
@@ -109,8 +128,8 @@ export default {
 
     },
     props: {
-    isLoggedIn: {
-        type: Boolean,
+        isLoggedIn: {
+            type: Boolean,
         }, 
         borrower: {
             type: Object
@@ -118,19 +137,23 @@ export default {
     },
     data() {
     return {
+        isFetching: true,
         formErrors: {'firstName': '', 'lastName': '', 'other_email': '', 'password': '', 'newPassword': '', 'confirmNewPassword':'', 'general': ''},
         formData: {'firstName': '', 'lastName': '', 'other_email': '', 'password': '', 'newPassword': '', 'confirmNewPassword':''},
         activeTab: 'viewLoans',
         userData: this.borrower,
-        itemsLoaned: null,
+        itemsLoaned: [],
+        bin: [],
         // userData: {firstName: 'Jeriel', lastName: 'Benavides', student_id: 100808730, dc_email: 'jeriel.benavides@dcmail.ca', other_email: 'someEmail@fake.com', program_name: 'Contemporary Web Design'},
         }
     },
     created() {
+        this.isFetching= true;
         if(!this.isLoggedIn){
             this.$router.push({ name: 'logout', params: {}});
         }
-        //Get assets for student
+        else{
+            //Get assets for student
             const options = {
                 url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/get_assets_logged_out.php",
                 method: "POST",
@@ -143,7 +166,8 @@ export default {
                 .then((res) => {
                 switch (res.data.error.id) {
                     case 0:
-                    this.itemsLoaned = res.data.assets;
+                        this.itemsLoaned = res.data.assets;
+                        this.bin = res.data.bin;
                     break;
                     /* add other responses here */
                     default:
@@ -154,11 +178,16 @@ export default {
                 .catch((err) => {
                 console.error("Get Assets Failed." + err);
                 });
+            this.isFetching = false;
+        }
+        
     },
     mounted() {
-        this.formData['firstName']= this.userData['firstName'];
-        this.formData['lastName']= this.userData['lastName'];
-        this.formData['other_email']= this.userData['other_email'];
+        if(this.isLoggedIn){
+            this.formData['firstName']= this.userData['firstName'];
+            this.formData['lastName']= this.userData['lastName'];
+            this.formData['other_email']= this.userData['other_email'];
+        }
     },
 
     methods: {
@@ -167,6 +196,12 @@ export default {
         },
         isActiveTab: function(val) {
             return this.activeTab === val;
+        },
+        getReturnsDate: function(phpDate) {
+            let time = new Date(phpDate*1000)
+            time.setMinutes(time.getMinutes()+20); 
+            let returnDate = time.toLocaleString('en-CA', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'}); 
+            return returnDate;
         },
         updateProfile: function() {
             //Check errors here
@@ -301,5 +336,8 @@ export default {
 }
 .profilePage{
     margin-bottom: 50px;
+}
+.empty{
+    min-height: 50px;
 }
 </style>
