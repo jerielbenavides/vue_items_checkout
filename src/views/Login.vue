@@ -2,6 +2,7 @@
     <div class="row container login_container">
         <div class="login_form col s12 m12 l3">
             <h5>EQUIPMENT SIGN OUT</h5>
+            <span v-if="this.formErrors['general']" class="errorSpan">{{ this.formErrors['general'] }}</span>
             <p></p>
             <p id="login_errors"></p>
             <form class="" @submit.prevent="submitLoginForm()">
@@ -42,8 +43,18 @@ export default {
     data() {
         return {
             isLoggedIn: false,
+            borrower: {
+                firstName: "",
+                lastName: "",
+                borrower_id: "",
+                dc_email: "",
+                other_email: "",
+                student_id: "",
+                program_name: "",
+                program_year: "",
+            },
             formData: {'id': '', 'password': ''},
-            formErrors: {'id': '', 'password': ''},
+            formErrors: {'id': '', 'password': '', 'general': ''},
         }
     },
     mounted() {
@@ -68,13 +79,52 @@ export default {
             }
             else{
                 //TODO: Validate Password?
-                this.formErrors['password']= '';
+                // this.formErrors['password']= '';
             }
             if(!errors){
-                // TODO: Make this actually work using the server
-                this.isLoggedIn = true;
-                this.$emit("submitLoginForm", this.isLoggedIn);
-                this.$router.push({ name: 'loan', params: {isLoggedIn: this.isLoggedIn }});
+                let student_id = this.formData['id'];
+                let password = this.formData['password'];
+                console.log(`Attempting to login with id: ${student_id} and password: ${password}`);
+                const options = {
+                    url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/login.php",
+                    method: "POST",
+                    data: {
+                    student_id: student_id,
+                    password: password,
+                    },
+                };
+
+                this.$axios(options)
+                    .then((res) => {
+                    this.borrowers = res.data;
+                    switch (res.data.error.id) {
+                        case 0:
+                            this.borrower.firstName = res.data.borrower.first_name;
+                            this.borrower.lastName = res.data.borrower.last_name;
+                            this.borrower.borrower_id = res.data.borrower.borrower_id;
+                            this.borrower.dc_email = res.data.borrower.dc_email;
+                            this.borrower.other_email  = res.data.borrower.other_email;
+                            this.borrower.student_id  = res.data.borrower.student_id;
+                            this.borrower.program_name  = res.data.borrower. program_name;
+                            this.borrower.program_year  = res.data.borrower.program_year;                         
+                            this.isLoggedIn = true;
+                            this.$emit("submitLoginForm", this.isLoggedIn, this.borrower);
+                            this.$router.push({ name: 'loan', params: {isLoggedIn: this.isLoggedIn }});
+                            break;
+                        case 1:
+                            this.formErrors['general']= "No Student ID or Password were entered.";
+                            break;
+                        case 2:
+                            this.formErrors['general']= 'Incorrect ID or Password.';
+                            break;
+                        default:
+                            this.formErrors['general']= "Something went wrong please try again.";
+                            break;
+                    }
+                    })
+                    .catch((err) => {
+                    console.error("Login failed." + err);
+                    });
             }
 
         }

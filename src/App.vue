@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar :navItems="links" :cartItems="cartItems" :isLoggedIn= this.isLoggedIn></Navbar>
+    <Navbar :navItems="links" :cartItems="cartItems" :isLoggedIn= this.isLoggedIn :borrower= this.borrower></Navbar>
     <router-view @itemSelected="onItemSelected" @submitLoginForm="showNavLinks"/>
     <Footer></Footer>
   </div>
@@ -21,15 +21,26 @@ export default {
   data() {
     return {
       isLoggedIn: false,
+      borrower: {
+          firstName: "",
+          lastName: "",
+          borrower_id: "",
+          dc_email: "",
+          other_email: "",
+          student_id: "",
+          program_name: "",
+          program_year: "",
+      },
       links: [["Login", "login"]],
       cartItems: []
     }
   },
   methods: {
     // BOX SITE ONLY: Show alternative navbar when not logged in...
-    showNavLinks: function(isLoggedIn){
+    showNavLinks: function(isLoggedIn, borrower){
       this.isLoggedIn = isLoggedIn;
       if(isLoggedIn){
+        this.borrower = borrower;
         console.log('User logging in');
         this.links =  [["Items", "loan"],[`Cart`,'cart'],["Profile", 'profile'],["Logout", 'logout']];
       }

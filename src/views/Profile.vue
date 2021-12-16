@@ -1,6 +1,6 @@
 <template>
     <div class="row container">
-        <h5>WELCOME, {{userData['firstname'].toUpperCase()}} {{userData['lastname'].toUpperCase()}}</h5>
+        <h5>WELCOME, {{userData['firstName'].toUpperCase()}} {{userData['lastName'].toUpperCase()}}</h5>
         <div class="categories_container col s12 m12 l3">
             <div>
                 <!-- <article id="viewLoans_tab" class="selectableItemCategory"><router-link to="/profile/loans">My Loans</router-link></article>
@@ -20,11 +20,12 @@
                             <div class="item">
                                 <label>
                                     <span>
-                                        <p class="itemName">{{  itemsLoaned[index]['name'] }}</p>
+                                        <p class="itemName">{{  itemsLoaned[index]['description'] }}</p>
                                         <p> Barcode: {{ itemsLoaned[index]['barcode'] }}</p>
+                                        <p> Serial Number: {{ itemsLoaned[index]['serial_number'] }}</p>
                                         <p> Category: {{ itemsLoaned[index]['category'] }}</p>
-                                        <p> Borrowed: {{ itemsLoaned[index]['borrowedDate'] }}</p>
-                                        <p> Return By: {{ itemsLoaned[index]['returnBy'] }}</p>                                                                                                                                                               
+                                        <p> Borrowed: {{ itemsLoaned[index]['out_time'] }}</p>
+                                        <p> Return By: {{ itemsLoaned[index]['due_time'] }}</p>                                                                                                                                                               
                                     </span>
                                 </label>
                                 
@@ -38,49 +39,50 @@
                 </section>
                 <section id="profileViewTab" v-show="isActiveTab('viewProfile')">
                     <h5>Your Info</h5>
-                        <p>Firstname</p>
-                        <p id="profile_firstname" class="itemName">{{userData['firstname']}}</p>
-                        <p>Lastname</p>
-                        <p id="profile_firstname" class="itemName">{{userData['lastname']}}</p>
+                        <p>firstName</p>
+                        <p id="profile_firstName" class="itemName">{{userData['firstName']}}</p>
+                        <p>lastName</p>
+                        <p id="profile_firstName" class="itemName">{{userData['lastName']}}</p>
                         <p>Student ID</p>
-                        <p id="profile_firstname" class="itemName">{{userData['studentId']}}</p>
+                        <p id="profile_firstName" class="itemName">{{userData['student_id']}}</p>
                         <p>DC Email</p>
-                        <p id="profile_firstname" class="itemName">{{userData['dcemail']}}</p>
+                        <p id="profile_firstName" class="itemName">{{userData['dc_email']}}</p>
                         <p>Alternate Email</p>
-                        <p id="profile_firstname" class="itemName">{{userData['alternateEmail']}}</p>
+                        <p id="profile_firstName" class="itemName">{{userData['other_email']}}</p>
                         <p>Program of Study</p>
-                        <p id="profile_firstname" class="itemName">{{userData['studyProgram']}}</p>
+                        <p id="profile_firstName" class="itemName">{{userData['program_name']}}</p>
                 </section>   
                 <section id="profileEditTab" v-show="isActiveTab('editProfile')">
                     <h5>Edit Profile</h5>
                     <form class="" v-on:submit="updateProfile">
+                        <span v-if="this.formErrors['general']" class="errorSpan">{{ this.formErrors['general'] }}</span>
                         <div class="input-field">
-                            <input id="edit_firstname" v-model="formData['firstname']" type="text">
-                            <span v-if="this.formErrors['firstname']" class="errorSpan">{{ this.formErrors['firstname'] }}</span>
-                            <label for="edit_firstname" class="active">Firstname</label>
+                            <input id="edit_firstName" v-model="formData['firstName']" type="text">
+                            <span v-if="this.formErrors['firstName']" class="errorSpan">{{ this.formErrors['firstName'] }}</span>
+                            <label for="edit_firstName" class="active">firstName</label>
                         </div>
                         <div class="input-field">
-                            <input id="edit_lastname" type="text" v-model="formData['lastname']">
-                            <span v-if="this.formErrors['lastname']" class="errorSpan">{{ this.formErrors['lastname'] }}</span>
-                            <label for="edit_lastname" class="active">Lastname</label>
+                            <input id="edit_lastName" type="text" v-model="formData['lastName']">
+                            <span v-if="this.formErrors['lastName']" class="errorSpan">{{ this.formErrors['lastName'] }}</span>
+                            <label for="edit_lastName" class="active">lastName</label>
                         </div>
                         <!-- <div class="input-field">
-                            <input id="edit_dcemail" type="text" class="active" :value="userData['dcemail']">
-                            <label for="edit_dcemail">DC Email</label>
+                            <input id="edit_dc_email" type="text" class="active" :value="userData['dc_email']">
+                            <label for="edit_dc_email">DC Email</label>
                         </div> -->
                         <div class="input-field">
-                            <input id="edit_alternateEmail" type="text" v-model="formData['alternateEmail']">
-                            <span v-if="this.formErrors['alternateEmail']" class="errorSpan">{{ this.formErrors['alternateEmail'] }}</span>
-                            <label for="edit_alternateEmail" class="active">Alternate Email</label>
+                            <input id="edit_other_email" type="text" v-model="formData['other_email']">
+                            <span v-if="this.formErrors['other_email']" class="errorSpan">{{ this.formErrors['other_email'] }}</span>
+                            <label for="edit_other_email" class="active">Alternate Email</label>
                         </div>
                         <!-- <div class="input-field">
-                            <input id="studentId" type="text" class="active" :value="userData['studentId']">
-                            <label for="studentId">Student ID</label>
+                            <input id="student_id" type="text" class="active" :value="userData['student_id']">
+                            <label for="student_id">Student ID</label>
                         </div> -->
                         <div class="input-field">
                             <input id="edit_Password" type="password" v-model="formData['password']">
                             <span v-if="this.formErrors['password']" class="errorSpan">{{ this.formErrors['password'] }}</span>
-                            <label for="edit_Password">Password</label>
+                            <label for="edit_Password">Password (Required only if changing)</label>
                         </div>
                         <div class="input-field">
                             <input id="edit_newPassword" type="password" v-model="formData['newPassword']">
@@ -110,31 +112,53 @@ export default {
     isLoggedIn: {
         type: Boolean,
         }, 
+        borrower: {
+            type: Object
+        },
     },
     data() {
     return {
-        formErrors: {'firstname': '', 'lastname': '', 'alternateEmail': '', 'password': '', 'newPassword': '', 'confirmNewPassword':''},
-        formData: {'firstname': '', 'lastname': '', 'alternateEmail': '', 'password': '', 'newPassword': '', 'confirmNewPassword':''},
+        formErrors: {'firstName': '', 'lastName': '', 'other_email': '', 'password': '', 'newPassword': '', 'confirmNewPassword':'', 'general': ''},
+        formData: {'firstName': '', 'lastName': '', 'other_email': '', 'password': '', 'newPassword': '', 'confirmNewPassword':''},
         activeTab: 'viewLoans',
-        userData: {firstname: 'Jeriel', lastname: 'Benavides', studentId: 100808730, dcemail: 'jeriel.benavides@dcmail.ca', alternateEmail: 'someEmail@fake.com', studyProgram: 'Contemporary Web Design', password: 'mypassword'},
-        //TODO: Load this on mounted event from server.
-        itemsLoaned: [{name: 'Canon HD Cam Recorder', barcode: 123456789, category:'Item Category', borrowedDate: '18 November 2021, 16:04', returnBy: '20 November 2021, 16:04'},
-                        {name: 'Microphone (some text here)', barcode: 123456789, category:'Item Category', borrowedDate: '18 November 2021, 16:04', returnBy: '20 November 2021, 16:04'},
-                        {name: 'Computer Camera', barcode: 123456789, category:'Item Category', borrowedDate: '18 November 2021, 16:04', returnBy: '20 November 2021, 16:04'},
-                        {name: 'HD VIsion Webcam (with removable shoe)', barcode: 123456789, category:'Item Category', borrowedDate: '18 November 2021, 16:04', returnBy: '20 November 2021, 16:04'},
-                        {name: 'Camera Tripod', barcode: 123456789, category:'Item Category', borrowedDate: '18 November 2021, 16:04', returnBy: '20 November 2021, 16:04'},
-                        {name: 'Nikkon Battery', barcode: 123456789, category:'Item Category', borrowedDate: '18 November 2021, 16:04', returnBy: '20 November 2021, 16:04'},]
-    }
+        userData: this.borrower,
+        itemsLoaned: null,
+        // userData: {firstName: 'Jeriel', lastName: 'Benavides', student_id: 100808730, dc_email: 'jeriel.benavides@dcmail.ca', other_email: 'someEmail@fake.com', program_name: 'Contemporary Web Design'},
+        }
     },
     created() {
         if(!this.isLoggedIn){
             this.$router.push({ name: 'logout', params: {}});
         }
+        //Get assets for student
+            const options = {
+                url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/get_assets_logged_out.php",
+                method: "POST",
+                data: {
+                student_id: this.borrower.student_id,
+                },
+            };
+
+            this.$axios(options)
+                .then((res) => {
+                switch (res.data.error.id) {
+                    case 0:
+                    this.itemsLoaned = res.data.assets;
+                    break;
+                    /* add other responses here */
+                    default:
+                    this.formErrors['general'] = "Something went wrong please try again.";
+                    break;
+                }
+                })
+                .catch((err) => {
+                console.error("Get Assets Failed." + err);
+                });
     },
     mounted() {
-        this.formData['firstname']= this.userData['firstname'];
-        this.formData['lastname']= this.userData['lastname'];
-        this.formData['alternateEmail']= this.userData['alternateEmail'];
+        this.formData['firstName']= this.userData['firstName'];
+        this.formData['lastName']= this.userData['lastName'];
+        this.formData['other_email']= this.userData['other_email'];
     },
 
     methods: {
@@ -148,12 +172,18 @@ export default {
             //Check errors here
             let errors = false;
             //clear binded variables
-            this.formErrors['firstname'] = !this.formData['firstname'] ? 'You must complete this field.': '';
-            this.formErrors['lastname'] = !this.formData['lastname'] ? 'You must complete this field.': '';
-            this.formErrors['alternateEmail'] = !this.formData['alternateEmail'] ? 'You must complete this field.': '';
-            this.formErrors['password'] = !this.formData['password'] ? 'You must complete this field.': '';
-            errors = (!this.formData['firstname'] || !this.formData['lastname'] || !this.formData['alternateEmail'] || !this.formData['password']) ? true : false;
-            if (this.formData['newPassword'] || this.formData['confirmNewPassword']){
+            this.formErrors['firstName'] = !this.formData['firstName'] ? 'You must complete this field.': '';
+            this.formErrors['lastName'] = !this.formData['lastName'] ? 'You must complete this field.': '';
+            this.formErrors['other_email'] = !this.formData['other_email'] ? 'You must complete this field.': '';
+            this.formErrors['password'] = '';
+            this.formErrors['general'] = '';
+            // this.formErrors['password'] = !this.formData['password'] ? 'You must complete this field.': '';
+            errors = (!this.formData['firstName'] || !this.formData['lastName'] || !this.formData['other_email']) ? true : false;
+            if (this.formData['newPassword'] || this.formData['confirmNewPassword'] ){
+                if(!this.formData['password']){
+                    this.formErrors['password'] = 'You must enter your old password if you want to change it.';    
+                    errors = true;
+                }
                 if (this.formData['newPassword'] === this.formData['confirmNewPassword']){
                     this.formErrors['confirmNewPassword'] = '';
                 }
@@ -165,56 +195,81 @@ export default {
                 }
             }
             if (!errors){
-            //TODO: Validate password.
-            if (this.formData['password']){ //Only do this if password is valid
-                this.userData['firstname']= this.formData['firstname'];
-                this.userData['lastname']= this.formData['lastname'];
-                this.userData['alternateEmail']= this.formData['alternateEmail'];
-                this.userData['password']= this.formData['password'];
-                if (this.formData['newPassword'] || this.formData['confirmNewPassword']){
-                    if (this.formData['newPassword'] === this.formData['confirmNewPassword']){
-                        this.formErrors['confirmNewPassword'] = '';
-                        this.userData['password']= this.formData['password']; //Change password in object
-                    }
-                    else{
-                        //Passwords do not match
-                        this.formErrors['confirmNewPassword'] = 'Passwords do not match.';
-                        errors = true;
-                        return;
-                    }
+            //Validate password, again...
+            const options = {
+                url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/update_borrower.php",
+                method: "POST",
+                data: {
+                    name_last : this.formData['firstName'],
+                    name_first : this.formData['lastName'],
+                    student_id : this.borrower.student_id,
+                    email_other : this.formData['other_email'],
+                    password_old : this.formData['password'],
+                    password_new : this.formData['newPassword'],
+                },
+            };
+
+            this.$axios(options)
+                .then((res) => {
+                switch (res.data.error.id) {
+                    case 0:
+                        //All went good. Update local variables
+                        this.userData['firstName']= this.formData['firstName'];
+                        this.userData['lastName']= this.formData['lastName'];
+                        this.userData['other_email']= this.formData['other_email'];
+                        this.userData['password']= this.formData['password'];
+                        // if (this.formData['newPassword'] || this.formData['confirmNewPassword']){
+                        //     if (this.formData['newPassword'] === this.formData['confirmNewPassword']){
+                        //         this.formErrors['confirmNewPassword'] = '';
+                        //         this.userData['password']= this.formData['password']; //Change password in object
+                        //     }
+                        //     else{
+                        //         //Passwords do not match
+                        //         this.formErrors['confirmNewPassword'] = 'Passwords do not match.';
+                        //         errors = true;
+                        //         return;
+                        //     }
+                        // }
+                        //TODO: Update on server
+                        if (!errors){
+                            //Notify user
+                            this.$swal.fire({
+                                title: '<strong>DONE</strong>',
+                                icon: 'none',
+                                html:
+                                    `<div id="modalDiv"> 
+                                        <h5>Your profile has been updated:</h5>
+                                    </div>`,
+                                showCloseButton: true,
+                                focusConfirm: false,
+                                confirmButtonText:'CONTINUE',
+                                customClass: {
+                                    container: 'alertContentContainer',
+                                    popup: '...',
+                                    header: '...',
+                                    title: 'alertTitle',
+                                    actions: 'alertActionButtons',
+                                    confirmButton: 'alertConfirm',
+                                    denyButton: 'alertDeny',
+                                    cancelButton: 'alertCancel',
+                                    footer: 'alertFooter',
+                                    }
+                            });
+                            //Clear password fields
+                            this.formData['password'] = '';
+                            this.formData['confirmNewPassword'] = '';
+                            this.formData['newPassword'] = '';
+                            this.formErrors['confirmNewPassword'] = '';
+                        }
+                        break;
+                    default:
+                        this.formErrors['general']= res.data.error.message;
+                        break;
                 }
-                //TODO: Update on server
-                if (!errors){
-                    //Notify user
-                    this.$swal.fire({
-                        title: '<strong>DONE</strong>',
-                        icon: 'none',
-                        html:
-                            `<div id="modalDiv"> 
-                                <h5>Your profile has been updated:</h5>
-                            </div>`,
-                        showCloseButton: true,
-                        focusConfirm: false,
-                        confirmButtonText:'CONTINUE',
-                        customClass: {
-                            container: 'alertContentContainer',
-                            popup: '...',
-                            header: '...',
-                            title: 'alertTitle',
-                            actions: 'alertActionButtons',
-                            confirmButton: 'alertConfirm',
-                            denyButton: 'alertDeny',
-                            cancelButton: 'alertCancel',
-                            footer: 'alertFooter',
-                            }
-                    });
-                    //Clear password fields
-                    this.formData['password'] = '';
-                    this.formData['confirmNewPassword'] = '';
-                    this.formData['newPassword'] = '';
-                    this.formErrors['confirmNewPassword'] = '';
-                }
-            }
+                })
+                .catch((err) => {
+                console.error("Login failed." + err);
+                });
             }
         }
     }
