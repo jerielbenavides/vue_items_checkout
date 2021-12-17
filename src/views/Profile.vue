@@ -58,9 +58,9 @@
                 </section>
                 <section id="profileViewTab" v-show="isActiveTab('viewProfile')">
                     <h5>Your Info</h5>
-                        <p>firstName</p>
+                        <p>First Name</p>
                         <p id="profile_firstName" class="itemName">{{userData['firstName']}}</p>
-                        <p>lastName</p>
+                        <p>Last Name</p>
                         <p id="profile_lastame" class="itemName">{{userData['lastName']}}</p>
                         <p>Student ID</p>
                         <p id="profile_id" class="itemName">{{userData['student_id']}}</p>
