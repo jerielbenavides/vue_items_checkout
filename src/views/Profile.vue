@@ -61,15 +61,15 @@
                         <p>firstName</p>
                         <p id="profile_firstName" class="itemName">{{userData['firstName']}}</p>
                         <p>lastName</p>
-                        <p id="profile_firstName" class="itemName">{{userData['lastName']}}</p>
+                        <p id="profile_lastame" class="itemName">{{userData['lastName']}}</p>
                         <p>Student ID</p>
-                        <p id="profile_firstName" class="itemName">{{userData['student_id']}}</p>
+                        <p id="profile_id" class="itemName">{{userData['student_id']}}</p>
                         <p>DC Email</p>
-                        <p id="profile_firstName" class="itemName">{{userData['dc_email']}}</p>
+                        <p id="profile_dcemail" class="itemName">{{userData['dc_email']}}</p>
                         <p>Alternate Email</p>
-                        <p id="profile_firstName" class="itemName">{{userData['other_email']}}</p>
+                        <p id="profile_otheremail" class="itemName">{{userData['other_email']}}</p>
                         <p>Program of Study</p>
-                        <p id="profile_firstName" class="itemName">{{userData['program_name']}}</p>
+                        <p id="profile_program" class="itemName">{{userData['program_name']}}</p>
                 </section>   
                 <section id="profileEditTab" v-show="isActiveTab('editProfile')">
                     <h5>Edit Profile</h5>
@@ -155,7 +155,7 @@ export default {
         else{
             //Get assets for student
             const options = {
-                url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/get_assets_logged_out.php",
+                url: "https://dca.durhamcollege.ca/~benavidesjeriel/signout/dynamic-site/services/get_assets_logged_out.php",
                 method: "POST",
                 data: {
                 student_id: this.borrower.student_id,
@@ -232,11 +232,11 @@ export default {
             if (!errors){
             //Validate password, again...
             const options = {
-                url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/update_borrower.php",
+                url: "https://dca.durhamcollege.ca/~benavidesjeriel/signout/dynamic-site/services/update_borrower.php",
                 method: "POST",
                 data: {
-                    name_last : this.formData['firstName'],
-                    name_first : this.formData['lastName'],
+                    name_last : this.formData['lastName'],
+                    name_first : this.formData['firstName'],
                     student_id : this.borrower.student_id,
                     email_other : this.formData['other_email'],
                     password_old : this.formData['password'],

@@ -84,7 +84,7 @@ export default {
                 let student_id = this.formData['id'];
                 let password = this.formData['password'];
                 const options = {
-                    url: "https://dca.durhamcollege.ca/~gubalaraymond/signout/services/login.php",
+                    url: "https://dca.durhamcollege.ca/~benavidesjeriel/signout/dynamic-site/services/login.php",
                     method: "POST",
                     data: {
                     student_id: student_id,
