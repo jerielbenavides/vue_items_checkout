@@ -7,12 +7,12 @@
             <p id="login_errors"></p>
             <form class="" @submit.prevent="submitLoginForm()">
                     <div class="input-field">
-                        <input id="studentId" type="text" v-model="formData['id']" class="validate">
+                        <input id="studentId" type="text" v-model="formData['id']" class="validate" placeholder="900000009">
                         <span v-if="this.formErrors['id']" class="errorSpan">{{ this.formErrors['id'] }}</span>
                         <label for="studentId">Student ID</label>
                     </div>
                     <div class="input-field">
-                        <input id="password" password="Password" type="password" v-model="formData['password']" class="validate">
+                        <input id="password" password="Password" type="password" v-model="formData['password']" class="validate" placeholder="dingo">
                         <span v-if="this.formErrors['password']" class="errorSpan">{{ this.formErrors['password'] }}</span>
                         <label for="password">Password</label>
                     </div>
@@ -84,7 +84,7 @@ export default {
                 let student_id = this.formData['id'];
                 let password = this.formData['password'];
                 const options = {
-                    url: "https://dca.durhamcollege.ca/~benavidesjeriel/signout/dynamic-site/services/login.php",
+                    url: "https://portfolio.jerielbenavides.com/signout/services/login.php",
                     method: "POST",
                     data: {
                     student_id: student_id,

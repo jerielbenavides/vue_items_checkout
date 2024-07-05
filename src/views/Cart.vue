@@ -128,7 +128,7 @@ export default {
                             }
                         });
                         const options = {
-                            url: "https://dca.durhamcollege.ca/~benavidesjeriel/signout/dynamic-site/services/add_assets_logged_out.php",
+                            url: "https://portfolio.jerielbenavides.com/signout/services/add_assets_logged_out.php",
                             method: "POST",
                             data: {
                             student_id: this.borrower.student_id,

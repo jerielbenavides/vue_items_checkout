@@ -155,7 +155,7 @@ export default {
         else{
             //Get assets for student
             const options = {
-                url: "https://dca.durhamcollege.ca/~benavidesjeriel/signout/dynamic-site/services/get_assets_logged_out.php",
+                url: "https://portfolio.jerielbenavides.com/signout/services/get_assets_logged_out.php",
                 method: "POST",
                 data: {
                 student_id: this.borrower.student_id,
@@ -232,7 +232,7 @@ export default {
             if (!errors){
             //Validate password, again...
             const options = {
-                url: "https://dca.durhamcollege.ca/~benavidesjeriel/signout/dynamic-site/services/update_borrower.php",
+                url: "https://portfolio.jerielbenavides.com/signout/services/update_borrower.php",
                 method: "POST",
                 data: {
                     name_last : this.formData['lastName'],

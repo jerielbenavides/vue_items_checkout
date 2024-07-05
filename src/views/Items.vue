@@ -75,7 +75,7 @@ export default {
         }
         else{
                 const options = {
-                url: "https://dca.durhamcollege.ca/~benavidesjeriel/signout/dynamic-site/services/get_assets.php",
+                url: "https://portfolio.jerielbenavides.com/signout/services/get_assets.php",
                 method: "POST",
                 data: {
                     student_id: this.borrower.student_id,
